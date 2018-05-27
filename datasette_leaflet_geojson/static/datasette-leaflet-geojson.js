@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             td.firstChild && td.firstChild.nodeValue &&
             (td.firstChild.nodeValue.trim().indexOf('{') === 0)
         )).forEach((td) => {
+            let data;
             try {
                 data = JSON.parse(td.firstChild.nodeValue);
             } catch {
