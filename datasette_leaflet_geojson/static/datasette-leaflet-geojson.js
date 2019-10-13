@@ -46,5 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 maxZoom: 14
             });
         });
+        window.dispatchEvent(new Event('resize'));
     }
 });
