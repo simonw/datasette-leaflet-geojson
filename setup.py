@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.2"
+VERSION = "0.3"
 
 
 def get_long_description():
@@ -25,4 +25,6 @@ setup(
     entry_points={"datasette": ["leaflet_geojson = datasette_leaflet_geojson"]},
     package_data={"datasette_leaflet_geojson": ["static/datasette-leaflet-geojson.js"]},
     install_requires=["datasette"],
+    extras_require={"test": ["pytest"]},
+    tests_require=["datasette-leaflet-geojson[test]"],
 )
