@@ -1,4 +1,35 @@
 from datasette import hookimpl
+import json
+
+GEOJSON_TYPES = {
+    "Point",
+    "MultiPoint",
+    "LineString",
+    "MultiLineString",
+    "Polygon",
+    "MultiPolygon",
+    "GeometryCollection",
+    "Feature",
+    "FeatureCollection",
+}
+
+
+@hookimpl(tryfirst=True)
+def render_cell(value):
+    # If value is JSON that looks like geojson, return it so no other
+    # plugin inteferes with it
+    # https://github.com/simonw/datasette-leaflet-geojson/issues/3
+    try:
+        data = json.loads(value)
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    if "type" not in data:
+        return None
+    if data["type"] in GEOJSON_TYPES:
+        return value
+    return None
 
 
 @hookimpl
