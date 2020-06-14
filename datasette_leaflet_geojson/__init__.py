@@ -17,7 +17,7 @@ GEOJSON_TYPES = {
 @hookimpl(tryfirst=True)
 def render_cell(value):
     # If value is JSON that looks like geojson, return it so no other
-    # plugin inteferes with it
+    # plugin interferes with it
     # https://github.com/simonw/datasette-leaflet-geojson/issues/3
     try:
         data = json.loads(value)
