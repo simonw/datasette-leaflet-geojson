@@ -28,8 +28,19 @@ def render_cell(value):
     if "type" not in data:
         return None
     if data["type"] in GEOJSON_TYPES:
-        return value
+        # Reduce floating point accuracy to something sensible
+        return json.dumps(round_floats(data))
     return None
+
+
+def round_floats(o):
+    if isinstance(o, float):
+        return round(o, 5)
+    if isinstance(o, dict):
+        return {k: round_floats(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [round_floats(x) for x in o]
+    return o
 
 
 @hookimpl
