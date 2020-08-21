@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const getFullNodeText = (el) => {
+        // https://stackoverflow.com/a/4412151
+        if (!el) {
+            return '';
+        }
+        if (typeof(el.textContent) != "undefined") {
+            return el.textContent;
+        }
+        return el.firstChild.nodeValue;
+    };
     const types = new Set([
         'Point',
         'MultiPoint',
@@ -21,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         )).forEach((td) => {
             let data;
             try {
-                data = JSON.parse(td.firstChild.nodeValue);
+                data = JSON.parse(getFullNodeText(td));
             } catch {
                 return;
             }
@@ -34,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             el.style.minWidth = '400px';
             el.style.height = '100%';
             el.style.minHeight = '400px';
-            td.replaceChild(el, td.firstChild);
+            while (td.firstChild){
+                td.removeChild(td.firstChild);
+            }
+            td.appendChild(el);
             let map = L.map(el, {layers: [L.tileLayer(tilesUrl, {
                 maxZoom: 19,
                 detectRetina: true,
