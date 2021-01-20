@@ -132,9 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (tdsToUpgrade.length) {
       loadDependencies(() => {
         let numDone = 0;
-        let maxToDo = 10;
         tdsToUpgrade.forEach((item) => {
-          upgradeTd(item, numDone < maxToDo);
+          upgradeTd(
+            item,
+            numDone < window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD
+          );
           numDone += 1;
         });
       });

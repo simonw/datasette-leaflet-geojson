@@ -50,3 +50,16 @@ def extra_js_urls(columns):
     return [
         "/-/static-plugins/datasette_leaflet_geojson/datasette-leaflet-geojson.js",
     ]
+
+
+@hookimpl
+def extra_body_script(datasette, database, table):
+    config = (
+        datasette.plugin_config(
+            "datasette-leaflet-geojson", database=database, table=table
+        )
+        or {}
+    )
+    return "window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD = {};".format(
+        json.dumps(config.get("default_maps_to_load") or 10)
+    )

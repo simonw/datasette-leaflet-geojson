@@ -22,3 +22,20 @@ Any columns containing valid GeoJSON strings will have their contents replaced w
 You can try this plugin out at https://calands.datasettes.com/calands/superunits_with_maps?MNG_AGENCY=Palo+Alto%2C+City+of
 
 ![datasette-leaflet-geojson in action](https://raw.github.com/simonw/datasette-leaflet-geojson/main/datasette-leaflet-geojson.png)
+
+## Configuration
+
+By default this plugin displays maps for the first ten rows, and shows a "Click to load map" prompt for rows past the first ten.
+
+You can change this limit using the `default_maps_to_load` plugin configuration setting. Add this to your `metadata.json`:
+
+```json
+{
+    "plugins": {
+        "datasette-leaflet-geojson": {
+            "default_maps_to_load": 20
+        }
+    }
+}
+```
+Then run Datasette with `datasette mydb.db -m metadata.json`.
