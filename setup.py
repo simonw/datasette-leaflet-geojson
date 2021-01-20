@@ -25,6 +25,6 @@ setup(
     entry_points={"datasette": ["leaflet_geojson = datasette_leaflet_geojson"]},
     package_data={"datasette_leaflet_geojson": ["static/datasette-leaflet-geojson.js"]},
     install_requires=["datasette>=0.48"],
-    extras_require={"test": ["pytest"]},
+    extras_require={"test": ["pytest", "pytest-asyncio"]},
     tests_require=["datasette-leaflet-geojson[test]"],
 )
