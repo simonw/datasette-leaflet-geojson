@@ -45,6 +45,50 @@ document.addEventListener('DOMContentLoaded', () => {
     ]);
     const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     const tilesUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+    function upgradeTd({td, data}, activate) {
+        // OK, it should be GeoJSON - display it with leaflet
+        let el = document.createElement('div');
+        el.style.width = '100%';
+        el.style.minWidth = '400px';
+        el.style.height = '100%';
+        el.style.minHeight = '400px';
+        el.style.backgroundColor = '#eee';
+        while (td.firstChild){
+            td.removeChild(td.firstChild);
+        }
+        td.appendChild(el);
+        function addMap() {
+            let map = L.map(el, {layers: [L.tileLayer(tilesUrl, {
+                maxZoom: 19,
+                detectRetina: true,
+                attribution: attribution
+            })]});
+            let layer = L.geoJSON(data);
+            layer.addTo(map);
+            map.fitBounds(layer.getBounds(), {
+                maxZoom: 14
+            });
+        }
+        if (activate) {
+            addMap();
+        } else {
+            let a = document.createElement('a');
+            a.innerHTML = 'Click to show map';
+            a.href = '#';
+            a.style.color = '#666';
+            a.style.display = 'flex';
+            a.style.justifyContent = 'center';
+            a.style.alignItems = 'center';
+            a.style.height = '400px';
+            a.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                a.parentNode.removeChild(a);
+                addMap();
+            });
+            el.appendChild(a);
+        }
+    }
     // Only execute on table, query and row pages
     if (document.querySelector('table.rows-and-columns')) {
         let tds = document.querySelectorAll('table.rows-and-columns td');
@@ -69,29 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (tdsToUpgrade.length) {
             loadDependencies(() => {
-                tdsToUpgrade.forEach(tdData => {
-                    let td = tdData.td;
-                    let data = tdData.data;
-                    // OK, it should be GeoJSON - display it with leaflet
-                    let el = document.createElement('div');
-                    el.style.width = '100%';
-                    el.style.minWidth = '400px';
-                    el.style.height = '100%';
-                    el.style.minHeight = '400px';
-                    while (td.firstChild){
-                        td.removeChild(td.firstChild);
-                    }
-                    td.appendChild(el);
-                    let map = L.map(el, {layers: [L.tileLayer(tilesUrl, {
-                        maxZoom: 19,
-                        detectRetina: true,
-                        attribution: attribution
-                    })]});
-                    let layer = L.geoJSON(data);
-                    layer.addTo(map);
-                    map.fitBounds(layer.getBounds(), {
-                        maxZoom: 14
-                    });
+                let numDone = 0;
+                let maxToDo = 10;
+                tdsToUpgrade.forEach(item => {
+                    upgradeTd(item, numDone < maxToDo);
+                    numDone += 1;
                 });
             });
         }
