@@ -44,12 +44,14 @@ def round_floats(o):
 
 
 @hookimpl
-def extra_js_urls(columns):
+def extra_js_urls(columns, datasette):
     if not columns:
         return None
     return [
         {
-            "url": "/-/static-plugins/datasette_leaflet_geojson/datasette-leaflet-geojson.js",
+            "url": datasette.urls.static_plugins(
+                "datasette-leaflet-geojson", "datasette-leaflet-geojson.js"
+            ),
             "module": True,
         }
     ]
