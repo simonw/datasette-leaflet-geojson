@@ -48,7 +48,10 @@ def extra_js_urls(columns):
     if not columns:
         return None
     return [
-        "/-/static-plugins/datasette_leaflet_geojson/datasette-leaflet-geojson.js",
+        {
+            "url": "/-/static-plugins/datasette_leaflet_geojson/datasette-leaflet-geojson.js",
+            "module": True,
+        }
     ]
 
 

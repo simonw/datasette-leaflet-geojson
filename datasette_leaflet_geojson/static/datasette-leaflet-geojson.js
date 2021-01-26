@@ -8,28 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     let stylesheet = document.createElement("link");
-    stylesheet.setAttribute("type", "text/css");
     stylesheet.setAttribute("rel", "stylesheet");
-    stylesheet.setAttribute(
-      "href",
-      "https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-    );
-    stylesheet.setAttribute(
-      "integrity",
-      "sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-    );
-    stylesheet.setAttribute("crossorigin", "anonymous");
+    stylesheet.setAttribute("href", datasette.leaflet.CSS_URL);
     stylesheet.onload = hasLoaded;
     document.head.appendChild(stylesheet);
-    let script = document.createElement("script");
-    script.src = "https://unpkg.com/leaflet@1.5.1/dist/leaflet.js";
-    script.setAttribute(
-      "integrity",
-      "sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-    );
-    script.setAttribute("crossorigin", "anonymous");
-    script.onload = stylesheet.onload = hasLoaded;
-    document.head.appendChild(script);
+    import(datasette.leaflet.JAVASCRIPT_URL).then(hasLoaded);
   };
   const getFullNodeText = (el) => {
     // https://stackoverflow.com/a/4412151
