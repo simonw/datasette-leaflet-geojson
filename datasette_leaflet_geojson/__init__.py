@@ -1,6 +1,13 @@
 from datasette import hookimpl
 import json
 
+TILE_LAYER = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+TILE_LAYER_OPTIONS = {
+    "maxZoom": 19,
+    "detectRetina": True,
+    "attribution": '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}
+
 GEOJSON_TYPES = {
     "Point",
     "MultiPoint",
@@ -65,6 +72,20 @@ def extra_body_script(datasette, database, table):
         )
         or {}
     )
-    return "window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD = {};".format(
-        json.dumps(config.get("default_maps_to_load") or 10)
+    js = []
+    js.append(
+        "window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD = {};".format(
+            json.dumps(config.get("default_maps_to_load") or 10)
+        )
     )
+    js.append(
+        "window.DATASETTE_LEAFLET_GEOJSON_TILE_LAYER = {};".format(
+            json.dumps(config.get("tile_layer") or TILE_LAYER)
+        )
+    )
+    js.append(
+        "window.DATASETTE_LEAFLET_GEOJSON_TILE_LAYER_OPTIONS = {};".format(
+            json.dumps(config.get("tile_layer_options") or TILE_LAYER_OPTIONS)
+        )
+    )
+    return "\n".join(js)
