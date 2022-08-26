@@ -19,7 +19,7 @@ Any columns containing valid GeoJSON strings will have their contents replaced w
 
 ## Demo
 
-You can try this plugin out at https://calands.datasettes.com/calands/superunits_with_maps?MNG_AGENCY=Palo+Alto%2C+City+of
+You can try this plugin out at https://calands.datasettes.com/calands/superunits_with_maps
 
 ![datasette-leaflet-geojson in action](https://raw.github.com/simonw/datasette-leaflet-geojson/main/datasette-leaflet-geojson.png)
 
