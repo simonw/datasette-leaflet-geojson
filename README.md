@@ -39,3 +39,5 @@ You can change this limit using the `default_maps_to_load` plugin configuration 
 }
 ```
 Then run Datasette with `datasette mydb.db -m metadata.json`.
+
+There are options for custom tile layers the same way as in <https://github.com/simonw/datasette-cluster-map#custom-tile-layers>.
