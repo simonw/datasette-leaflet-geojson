@@ -124,6 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
     }
-    window.dispatchEvent(new Event("resize"));
+    // don't throw an error if another JS library expect Events to be attached to the DOM.
+    // Happens with Plot/D3
+    try {
+      window.dispatchEvent(new Event("resize"));
+    } catch {}
   }
 });
