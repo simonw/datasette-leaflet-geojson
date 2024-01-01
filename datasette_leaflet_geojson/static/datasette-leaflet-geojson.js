@@ -52,23 +52,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     td.appendChild(el);
     function addMap() {
-      let map = L.map(el, {
-        layers: [
-          L.tileLayer(tilesUrl, {
-            maxZoom: 19,
-            detectRetina: true,
-            attribution: attribution,
-          }),
-        ],
-      });
+      var map = null;
       try {
+        map = L.map(el, {
+          layers: [
+            L.tileLayer(tilesUrl, {
+              maxZoom: 19,
+              detectRetina: true,
+              attribution: attribution,
+            }),
+          ],
+        });
         let layer = L.geoJSON(data);
         layer.addTo(map);
         map.fitBounds(layer.getBounds(), {
           maxZoom: 14,
         });
       } catch (error) {
-        console.warn("GeoJSON parse failed", data, error);
+        console.warn("Map creation failed", data, error);
         let div = document.createElement("div");
         div.innerHTML = "Error while displaying map: " + error;
         div.style.color = "#666";
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         div.style.alignItems = "center";
         div.style.height = "400px";
 
-        map.remove();
+        if (map) { map.remove(); }
         el.appendChild(div);
       }
     }
