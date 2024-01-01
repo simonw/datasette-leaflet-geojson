@@ -116,11 +116,15 @@ document.addEventListener("DOMContentLoaded", () => {
       loadDependencies(() => {
         let numDone = 0;
         tdsToUpgrade.forEach((item) => {
-          upgradeTd(
-            item,
-            numDone < window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD
-          );
-          numDone += 1;
+          try {
+            upgradeTd(
+              item,
+              numDone < window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD
+            );
+            numDone += 1;
+          } catch (error) {
+            console.warn("Failed to add map for", item, error);
+          }
         });
       });
     }
