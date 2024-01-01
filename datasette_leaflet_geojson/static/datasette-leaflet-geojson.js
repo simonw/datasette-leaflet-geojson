@@ -52,20 +52,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     td.appendChild(el);
     function addMap() {
-      let map = L.map(el, {
-        layers: [
-          L.tileLayer(tilesUrl, {
-            maxZoom: 19,
-            detectRetina: true,
-            attribution: attribution,
-          }),
-        ],
-      });
-      let layer = L.geoJSON(data);
-      layer.addTo(map);
-      map.fitBounds(layer.getBounds(), {
-        maxZoom: 14,
-      });
+      var map = null;
+      try {
+        map = L.map(el, {
+          layers: [
+            L.tileLayer(tilesUrl, {
+              maxZoom: 19,
+              detectRetina: true,
+              attribution: attribution,
+            }),
+          ],
+        });
+        let layer = L.geoJSON(data);
+        layer.addTo(map);
+        map.fitBounds(layer.getBounds(), {
+          maxZoom: 14,
+        });
+      } catch (error) {
+        console.warn("Map creation failed", data, error);
+        let div = document.createElement("div");
+        div.innerHTML = "Error while displaying map: " + error;
+        div.style.color = "#666";
+        div.style.display = "flex";
+        div.style.justifyContent = "center";
+        div.style.alignItems = "center";
+        div.style.height = "400px";
+
+        if (map) { map.remove(); }
+        el.appendChild(div);
+      }
     }
     if (activate) {
       addMap();
@@ -116,11 +131,15 @@ document.addEventListener("DOMContentLoaded", () => {
       loadDependencies(() => {
         let numDone = 0;
         tdsToUpgrade.forEach((item) => {
-          upgradeTd(
-            item,
-            numDone < window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD
-          );
-          numDone += 1;
+          try {
+            upgradeTd(
+              item,
+              numDone < window.DATASETTE_LEAFLET_GEOJSON_DEFAULT_MAPS_TO_LOAD
+            );
+            numDone += 1;
+          } catch (error) {
+            console.warn("Failed to add map for", item, error);
+          }
         });
       });
     }
