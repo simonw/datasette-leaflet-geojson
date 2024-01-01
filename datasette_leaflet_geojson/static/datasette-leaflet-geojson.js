@@ -61,11 +61,25 @@ document.addEventListener("DOMContentLoaded", () => {
           }),
         ],
       });
-      let layer = L.geoJSON(data);
-      layer.addTo(map);
-      map.fitBounds(layer.getBounds(), {
-        maxZoom: 14,
-      });
+      try {
+        let layer = L.geoJSON(data);
+        layer.addTo(map);
+        map.fitBounds(layer.getBounds(), {
+          maxZoom: 14,
+        });
+      } catch (error) {
+        console.warn("GeoJSON parse failed", data, error);
+        let div = document.createElement("div");
+        div.innerHTML = "Error while displaying map: " + error;
+        div.style.color = "#666";
+        div.style.display = "flex";
+        div.style.justifyContent = "center";
+        div.style.alignItems = "center";
+        div.style.height = "400px";
+
+        map.remove();
+        el.appendChild(div);
+      }
     }
     if (activate) {
       addMap();
