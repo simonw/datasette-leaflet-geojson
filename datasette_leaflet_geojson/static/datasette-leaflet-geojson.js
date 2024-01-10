@@ -35,9 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "Feature",
     "FeatureCollection",
   ]);
-  const attribution =
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-  const tilesUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
   function upgradeTd({ td, data }, activate) {
     // OK, it should be GeoJSON - display it with leaflet
@@ -54,11 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function addMap() {
       let map = L.map(el, {
         layers: [
-          L.tileLayer(tilesUrl, {
-            maxZoom: 19,
-            detectRetina: true,
-            attribution: attribution,
-          }),
+          L.tileLayer(
+            window.DATASETTE_LEAFLET_GEOJSON_TILE_LAYER,
+            window.DATASETTE_LEAFLET_GEOJSON_TILE_LAYER_OPTIONS
+          ),
         ],
       });
       let layer = L.geoJSON(data);
